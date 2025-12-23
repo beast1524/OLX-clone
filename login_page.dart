@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
-import 'sell_listing_page.dart';
+import 'main_navigation.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -29,15 +29,23 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
- void _submit() {
+void _submit() {
   if (_formKey.currentState?.validate() ?? false) {
-    // Navigate to Seller Page
+    // TEMPORARY role logic (replace after Supabase)
+    final bool isAdmin =
+        _emailController.text.trim().toLowerCase().endsWith('@admin.com');
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const SellListingPage()),
+      MaterialPageRoute(
+        builder: (_) => MainNavigation(
+          isAdmin: isAdmin,
+        ),
+      ),
     );
   }
 }
+
 
   void _onForgotPassword() {
     // TODO: navigate to Forgot Password page
@@ -73,6 +81,15 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Linde Logo at top
+                      Center(
+                        child: Image.asset(
+                          'assets/linde_logo.png',
+                          height: 60,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
                       const Text(
                         'Welcome back!',
                         style: TextStyle(
@@ -214,27 +231,27 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 12),
 
                       // Placeholder for SSO button
-                      SizedBox(
-                        width: double.infinity,
+                     SizedBox(
+                       width: double.infinity,
                         child: OutlinedButton.icon(
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Google sign-in (TODO: integrate OAuth)'),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.g_mobiledata),
-                          label: const Text('Sign in with Google'),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                          const SnackBar(
+                            content: Text('Microsoft SSO (TODO: integrate Azure AD)'),
                           ),
-                        ),
-                      ),
+                        );
+                      },
+    icon: const Icon(Icons.window), // or Icons.account_circle as placeholder
+    label: const Text('Sign in with Microsoft'),
+    style: OutlinedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+  ),
+),
+
                       const SizedBox(height: 16),
 
                       // Signup link
@@ -242,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Don’t have an account?",
+                            "Don't have an account?",
                             style: TextStyle(fontSize: 13),
                           ),
                           TextButton(
@@ -267,14 +284,14 @@ class _LoginPageState extends State<LoginPage> {
                     height: double.infinity,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xFF4C6FFF), Color(0xFF8F5BFF)],
+                        colors: [Color(0xFF0066A1), Color(0xFF004F7C)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                     ),
                     child: Stack(
                       children: [
-                        // Simple geometric decoration to mimic your reference
+                        // Simple geometric decoration
                         Positioned(
                           top: 40,
                           left: 40,
@@ -299,14 +316,15 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const Center(
-                          child: Text(
-                            'Company\nMarketplace',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                        // Linde Logo at top
+                        Positioned(
+                          top: 60,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/linde_logo.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
@@ -330,26 +348,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const SizedBox(height: 60),
                   form,
-                  Container(
-                    height: 200,
-                    margin: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF4C6FFF), Color(0xFF8F5BFF)],
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(24)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Company Marketplace',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             );
